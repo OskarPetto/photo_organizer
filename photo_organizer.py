@@ -37,7 +37,7 @@ def organize_photos_by_year(source_dir):
                     year_dir = os.path.join(source_dir, str(date.year))
                     os.makedirs(year_dir, exist_ok=True)
                     new_photo_path = os.path.join(year_dir, file)
-                    #os.rename(photo_path, new_photo_path)
+                    os.rename(photo_path, new_photo_path)
                     print(f"Moved {file} to {new_photo_path}")
                 else:
                     print(f"Date not found for {file}, skipping...")
