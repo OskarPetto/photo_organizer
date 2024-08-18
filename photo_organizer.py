@@ -15,10 +15,10 @@ allowed_extensions = (
 def get_photo_date(photo_path):
     fallback_date = datetime.utcfromtimestamp(os.path.getmtime(photo_path))
     try:
-        file_name = os.path.basename(photo_path)
-        if match := re.search("([0-9]{8})", file_name):
-            date_string = match.group(1)
-            fallback_date = datetime.strptime(date_string, '%Y%m%d')
+        # file_name = os.path.basename(photo_path)
+        # if match := re.search("([0-9]{8})", file_name):
+        #     date_string = match.group(1)
+        #     fallback_date = datetime.strptime(date_string, '%Y%m%d')
         img = Image.open(photo_path)
         exif_data = img._getexif()
         if exif_data is None:
@@ -33,19 +33,18 @@ def get_photo_date(photo_path):
     return fallback_date
     
 def organize_photos_by_year(source_dir):
-    for root, _, files in os.walk(source_dir):
-        for file in files:
-            if file.lower().endswith(allowed_extensions):
-                photo_path = os.path.join(root, file)
-                date = get_photo_date(photo_path)
-                if date:
-                    year_dir = os.path.join(source_dir, str(date.year))
-                    os.makedirs(year_dir, exist_ok=True)
-                    new_photo_path = os.path.join(year_dir, file)
-                    os.rename(photo_path, new_photo_path)
-                    print(f"Moved {file} to {new_photo_path}")
-                else:
-                    print(f"Date not found for {file}, skipping...")
+    for file in os.listdir(source_dir):
+        if file.lower().endswith(allowed_extensions):
+            photo_path = os.path.join(source_dir, file)
+            date = get_photo_date(photo_path)
+            if date:
+                year_dir = os.path.join(source_dir, str(date.year))
+                os.makedirs(year_dir, exist_ok=True)
+                new_photo_path = os.path.join(year_dir, file)
+                os.rename(photo_path, new_photo_path)
+                print(f"Moved {file} to {new_photo_path}")
+            else:
+                print(f"Date not found for {file}, skipping...")
 
 
 if __name__ == "__main__":
