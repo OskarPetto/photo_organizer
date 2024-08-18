@@ -15,10 +15,10 @@ allowed_extensions = (
 def get_photo_date(photo_path):
     fallback_date = datetime.utcfromtimestamp(os.path.getmtime(photo_path))
     try:
-        # file_name = os.path.basename(photo_path)
-        # if match := re.search("([0-9]{8})", file_name):
-        #     date_string = match.group(1)
-        #     fallback_date = datetime.strptime(date_string, '%Y%m%d')
+        file_name = os.path.basename(photo_path)
+        if match := re.search("([0-9]{8})", file_name):
+            date_string = match.group(1)
+            fallback_date = datetime.strptime(date_string, '%Y%m%d')
         img = Image.open(photo_path)
         exif_data = img._getexif()
         if exif_data is None:
